@@ -1,0 +1,36 @@
+{
+  "name": "seneca-sqs-queue",
+  "version": "0.1.0",
+  "description": "A Seneca queue implementation over Amazon SQS",
+  "main": "queue.js",
+  "scripts": {
+    "test": "env $(cat ./config/test_env) mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nss/seneca-sqs-queue.git"
+  },
+  "keywords": [
+    "seneca",
+    "job",
+    "queue",
+    "task",
+    "async",
+    "sqs",
+    "aws"
+  ],
+  "author": "Luca Lanziani (http://lanziani.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Nss/seneca-sqs-queue/issues"
+  },
+  "homepage": "https://github.com/Nss/seneca-sqs-queue",
+  "dependencies": {
+    "async": "^0.9.0",
+    "aws-sdk": "^2.1.16",
+    "seneca": "^0.6.1"
+  },
+  "devDependencies": {
+    "chai": "^2.1.1"
+  }
+}
