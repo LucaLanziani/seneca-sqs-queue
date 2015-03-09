@@ -4,7 +4,7 @@ A SQS job queue plugin for Seneca
 
 It support send/receive messages to/from a given Amazon SQS queue.
 
-In order to receive a message you should add a seneca patter that will match the message you are sending i.e:
+In order to receive a message you should add a Seneca patter that will match the message you are sending i.e:
 
   ```js
   seneca.add({type: 'task'}, function (args, next) {
