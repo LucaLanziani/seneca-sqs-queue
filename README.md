@@ -15,30 +15,19 @@ In order to receive a message you should add a Seneca patter that will match the
 and then start the receiver with:
 
   ```js
-  seneca.act({role: 'queue', type: 'sqs', cmd: 'start'});
+  seneca.act({role: 'queue', cmd: 'start'});
   ```
 
 this will receive all the messages containing a `type` key with the `task` value, to send a message like this use:
 
   ```js
-  seneca.act({role: 'queue', type: 'sqs', cmd: 'enqueue', msg: {type: 'task', number '42'}});
+  seneca.act({role: 'queue', cmd: 'enqueue', msg: {type: 'task', number '42'}});
   ```
 
 you can stop the queue with:
 
   ```js
-  seneca.act({role: 'queue', type: 'sqs', cmd: 'stop'});
-  ```
-
-## Attention
-
-You should delete the message from the SQS queue after you have done with it if you don't want receive it again, to do that you can use the method `_deleteMessage` of the args object:
-
-  ```js
-  seneca.add({type: 'task'}, function (args, next) {
-    console.log(args);
-    args._deleteMesssage(next); //next will be called after the message is deleted;
-  });
+  seneca.act({role: 'queue', cmd: 'stop'});
   ```
 
 ## Events
@@ -49,7 +38,6 @@ If we want to execute and action when the receiver is stopped we can subscribe t
   ```js
   seneca.add({
       role: 'queue',
-      type: 'sqs',
       evnt: 'stopped'
     }, function () {
       console.log("RECEIVER STOPPED");

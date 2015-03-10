@@ -30,15 +30,15 @@ describe('Given a process environment', function () {
       var seneca = require('seneca')().use(queue, {recv_params: {WaitTimeSeconds: 1}});
 
       function startQueue () {
-        seneca.act({role: 'queue', type: 'sqs', cmd: 'start'});
+        seneca.act({role: 'queue', cmd: 'start'});
       }
 
       function stopQueue () {
-        seneca.act({role: 'queue', type: 'sqs', cmd: 'stop'});
+        seneca.act({role: 'queue', cmd: 'stop'});
       }
 
       function sendTask (number) {
-        seneca.act({ role: 'queue', type: 'sqs', cmd: 'enqueue', msg: {type: 'task', number: number}});
+        seneca.act({ role: 'queue', cmd: 'enqueue', msg: {type: 'task', number: number}});
       }
 
       function on_task (cb) {
@@ -50,7 +50,6 @@ describe('Given a process environment', function () {
       function once_on_evnt (evnt, cb) {
         var on = {
           role: 'queue',
-          type: 'sqs',
           evnt: evnt
         };
         seneca.add(on, function () {
@@ -64,7 +63,8 @@ describe('Given a process environment', function () {
         this.timeout(10000);
 
         on_task(function (args, next) {
-          args._deleteMessage(next);
+          console.log('here');
+          next();
         });
 
         once_on_evnt('empty', stopQueue);
@@ -73,7 +73,6 @@ describe('Given a process environment', function () {
       });
 
       afterEach(function (done) {
-        this.timeout(10000);
 
         once_on_evnt('stopped', done);
         stopQueue();
@@ -93,8 +92,8 @@ describe('Given a process environment', function () {
         var number = Math.random();
         on_task(function (args, next) {
           expect(args.number).to.be.equal(number);
-          args._deleteMessage(done);
           next();
+          done();
         });
 
         sendTask(number);
@@ -102,7 +101,7 @@ describe('Given a process environment', function () {
       });
 
       it('it can send and receive multiple tasks', function (done) {
-        this.timeout(5000);
+        this.timeout(10000);
         var numbers = [Math.random(), Math.random(), Math.random()];
         var received = [];
         var number_of_messages = 0;
@@ -117,7 +116,7 @@ describe('Given a process environment', function () {
         on_task(function (args, next) {
           received.push(args.number);
           number_of_messages += 1;
-          args._deleteMessage(next);
+          next();
         });
 
         numbers.forEach( function (number) {

@@ -2,16 +2,15 @@ var seneca = require('seneca')().use(require('../'), {recv_params: {WaitTimeSeco
 var numbers = [1, 2];
 
 function startQueue () {
-  seneca.act({ role: 'queue', type: 'sqs', cmd: 'start' });
+  seneca.act({ role: 'queue', cmd: 'start' });
 }
 
 function stopQueue () {
-  seneca.act({ role: 'queue', type: 'sqs', cmd: 'stop' });
+  seneca.act({ role: 'queue', cmd: 'stop' });
 }
 
 seneca.add({
   role: 'queue',
-  type: 'sqs',
   evnt: 'empty'
 }, function (args, done) {
   console.log('empty');
@@ -20,7 +19,6 @@ seneca.add({
 
 seneca.add({
   role: 'queue',
-  type: 'sqs',
   evnt: 'stopped'
 }, function (args, done) {
   console.log('stopped');
@@ -32,13 +30,7 @@ seneca.add({
   param: 1
 }, function (args, next) {
   console.log(1, args.param);
-
-  args._deleteMessage(function (err, data) {
-    if (err) {
-      console.error(err);
-    }
-    next();
-  });
+  next();
 });
 
 seneca.add({
@@ -46,17 +38,11 @@ seneca.add({
   param: 2
 }, function (args, next) {
   console.log(2, args.param);
-
-  args._deleteMessage(function (err, data) {
-    if (err) {
-      console.error(err);
-    }
-    next();
-  });
+  next();
 });
 
 numbers.forEach(function (number) {
-    seneca.act({ role: 'queue', type: 'sqs', cmd: 'enqueue', msg: {task: 'my task', param: number}});
+    seneca.act({ role: 'queue', cmd: 'enqueue', msg: {task: 'my task', param: number}});
 });
 
 startQueue();
