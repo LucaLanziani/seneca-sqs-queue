@@ -1,3 +1,5 @@
+'use strict';
+
 var seneca = require('seneca')().use(require('../'));
 
 function startQueue () {

@@ -1,4 +1,6 @@
-var seneca = require('seneca')().use(require('../'), {recv_params: {WaitTimeSeconds: 1}});
+'use strict';
+
+var seneca = require('seneca')().use(require('../'), {recvParams: {WaitTimeSeconds: 1}});
 var numbers = [1, 2];
 
 function startQueue () {
@@ -42,7 +44,7 @@ seneca.add({
 });
 
 numbers.forEach(function (number) {
-    seneca.act({ role: 'queue', cmd: 'enqueue', msg: {task: 'my task', param: number}});
+  seneca.act({ role: 'queue', cmd: 'enqueue', msg: {task: 'my task', param: number}});
 });
 
 startQueue();

@@ -1,6 +1,7 @@
 var expect = require('chai').expect;
 
 describe('Given a process environment', function () {
+  'use strict';
 
   beforeEach('it should contain non empty QUEUE_URL and AWS REGION', function (done) {
     expect(process.env).to.have.property('REGION').and.to.not.be.empty; // jshint ignore:line
@@ -27,7 +28,7 @@ describe('Given a process environment', function () {
 
     describe('Given a seneca object with sqs-queue plugin and and empty queue', function () {
       var queue = require('../');
-      var seneca = require('seneca')().use(queue, {recv_params: {WaitTimeSeconds: 1}});
+      var seneca = require('seneca')().use(queue, {recvParams: {WaitTimeSeconds: 1}});
 
       function startQueue () {
         seneca.act({role: 'queue', cmd: 'start'});
@@ -41,13 +42,13 @@ describe('Given a process environment', function () {
         seneca.act({ role: 'queue', cmd: 'enqueue', msg: {type: 'task', number: number}});
       }
 
-      function on_task (cb) {
+      function onTask (cb) {
         seneca.add({type:'task'}, cb);
       }
 
       function pass() {}
 
-      function once_on_evnt (evnt, cb) {
+      function onceOnEvnt (evnt, cb) {
         var on = {
           role: 'queue',
           evnt: evnt
@@ -62,35 +63,35 @@ describe('Given a process environment', function () {
       beforeEach(function (done) {
         this.timeout(10000);
 
-        on_task(function (args, next) {
+        onTask(function (args, next) {
           console.log('here');
           next();
         });
 
-        once_on_evnt('empty', stopQueue);
-        once_on_evnt('stopped', done);
+        onceOnEvnt('empty', stopQueue);
+        onceOnEvnt('stopped', done);
         startQueue();
       });
 
       afterEach(function (done) {
 
-        once_on_evnt('stopped', done);
+        onceOnEvnt('stopped', done);
         stopQueue();
       });
 
       it('it should emit a stop event if already stopped', function (done) {
-        once_on_evnt('stopped', done);
+        onceOnEvnt('stopped', done);
         stopQueue();
       });
 
       it('it should emit an empty event', function (done) {
-        once_on_evnt('empty', done);
+        onceOnEvnt('empty', done);
         startQueue();
       });
 
       it('it can send receive and delete a task', function (done) {
         var number = Math.random();
-        on_task(function (args, next) {
+        onTask(function (args, next) {
           expect(args.number).to.be.equal(number);
           next();
           done();
@@ -104,18 +105,18 @@ describe('Given a process environment', function () {
         this.timeout(10000);
         var numbers = [Math.random(), Math.random(), Math.random()];
         var received = [];
-        var number_of_messages = 0;
-        once_on_evnt('empty', function (cb) {
+        var numberOfMessages = 0;
+        onceOnEvnt('empty', function (cb) {
           received.forEach( function (number) {
             expect(numbers).to.include(number);
           });
-          expect(number_of_messages).to.be.equal(numbers.length);
+          expect(numberOfMessages).to.be.equal(numbers.length);
           done();
         });
 
-        on_task(function (args, next) {
+        onTask(function (args, next) {
           received.push(args.number);
-          number_of_messages += 1;
+          numberOfMessages += 1;
           next();
         });
 

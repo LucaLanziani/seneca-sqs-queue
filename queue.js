@@ -2,7 +2,9 @@
 var sqs = require('./lib/sqs');
 
 function queue(options) {
-  var seneca = this;
+  'use strict';
+
+  var seneca = this;  // jshint ignore:line
   var region = process.env.REGION;
   var queueUrl = process.env.QUEUE_URL;
 
@@ -10,10 +12,10 @@ function queue(options) {
     role: 'queue',
     region: region,
     queueUrl: queueUrl,
-    send_params: {
+    sendParams: {
       QueueUrl: queueUrl
     },
-    recv_params: {
+    recvParams: {
       QueueUrl: queueUrl
     }
   }, options);
