@@ -4,8 +4,10 @@
   "description": "A Seneca queue implementation over Amazon SQS",
   "main": "queue.js",
   "scripts": {
-    "test": "env $(cat ./config/test_env) mocha test"
+    "test": "env $(cat ./config/test_env) mocha test",
+    "lint": "./node_modules/.bin/jshint --verbose ./"
   },
+  "precommit": ["lint"],
   "repository": {
     "type": "git",
     "url": "https://github.com/Nss/seneca-sqs-queue.git"
@@ -31,6 +33,8 @@
     "seneca": "^0.6.1"
   },
   "devDependencies": {
-    "chai": "^2.1.1"
+    "chai": "^2.1.1",
+    "jshint": "^2.4.4",
+    "precommit-hook": "^1.0.7"
   }
 }
