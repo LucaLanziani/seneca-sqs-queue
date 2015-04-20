@@ -28,7 +28,11 @@ describe('Given a process environment', function () {
 
     describe('Given a seneca object with sqs-queue plugin and and empty queue', function () {
       var queue = require('../');
-      var seneca = require('seneca')().use(queue, {recvParams: {WaitTimeSeconds: 1}});
+      var seneca = require('seneca')().use(queue, {
+        region: process.env.REGION,
+        queueUrl: process.env.QUEUE_URL,
+        recvParams: {WaitTimeSeconds: 1}
+      });
 
       function startQueue () {
         seneca.act({role: 'queue', cmd: 'start'});

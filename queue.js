@@ -1,16 +1,18 @@
 
-var sqs = require('./lib/sqs');
+var sqs = require('./lib/sqs'),
+    assert = require('assert');
 
 function queue(options) {
   'use strict';
 
+  assert(options, 'missing options');
+  assert(options.queueUrl, 'missing queueUrl');
+
   var seneca = this;  // jshint ignore:line
-  var region = process.env.REGION;
-  var queueUrl = process.env.QUEUE_URL;
+  var queueUrl = options.queueUrl;
 
   options = seneca.util.deepextend({
     role: 'queue',
-    region: region,
     queueUrl: queueUrl,
     sendParams: {
       QueueUrl: queueUrl
