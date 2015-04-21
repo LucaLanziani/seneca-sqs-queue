@@ -13,7 +13,6 @@ function queue(options) {
 
   options = seneca.util.deepextend({
     role: 'queue',
-    queueUrl: queueUrl,
     sendParams: {
       QueueUrl: queueUrl
     },
