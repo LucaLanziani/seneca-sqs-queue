@@ -7,6 +7,7 @@ function queue(options) {
 
   assert(options, 'missing options');
   assert(options.queueUrl, 'missing queueUrl');
+  assert(options.region, 'missing region');
 
   var seneca = this;  // jshint ignore:line
   var queueUrl = options.queueUrl;
